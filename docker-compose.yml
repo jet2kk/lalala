@@ -1,0 +1,29 @@
+services:
+  bot:
+    build: .
+    container_name: discord-music-bot
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      lavalink:
+        condition: service_started
+    networks: [music]
+
+  lavalink:
+    image: ghcr.io/lavalink-devs/lavalink:4.2.2-alpine
+    container_name: lavalink
+    restart: unless-stopped
+    environment:
+      _JAVA_OPTIONS: "-Xms256M -Xmx1G"
+    env_file: .env
+    volumes:
+      - ./lavalink/application.yml:/opt/Lavalink/application.yml:ro
+      - lavalink_plugins:/opt/Lavalink/plugins
+    expose: ["2333"]
+    networks: [music]
+
+networks:
+  music:
+    driver: bridge
+volumes:
+  lavalink_plugins:

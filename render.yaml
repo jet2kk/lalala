@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: discord-music-bot
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    autoDeploy: true
+    healthCheckPath: /health
